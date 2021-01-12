@@ -10,6 +10,8 @@
 class playerStats{
 public:
     int shipSpeed = 5;
+    int bulletSpeed = 15;
+    int bulletCount=0;
 };
 
 //Action class which provides usefull functions
@@ -54,6 +56,7 @@ public:
 //Class which provides the central game loop
 class gameLoop{
 private:
+    sf::Vector2f direction = sf::Vector2f(0.0, -2.0);
     playerStats stats;
     sf::Time updateTime = sf::milliseconds(20);
     sf::RenderWindow window{ sf::VideoMode{ 1920, 875 },"SFML window" };
@@ -67,8 +70,9 @@ private:
     std::map<std::string, picture> objectList = {
         {"ship", picture(sf::Vector2f( 500.0, 500.0 ), "images/ship1.png", sf::Vector2f( 80.0f, 80.0f ))}
     };
+    std::vector<rectangle>bulletList;
 
-    action actions[4] = {
+    action actions[5] = {
         action( sf::Keyboard::Left,  [&](){ 
             objectList["ship"].move( sf::Vector2f( -stats.shipSpeed, 0.0 )); 
             if(objectList["ship"].collision( borderList["wall_left"] )){
@@ -91,6 +95,22 @@ private:
             objectList["ship"].move( sf::Vector2f( 0.0, stats.shipSpeed )); 
             if(objectList["ship"].collision( borderList["wall_bottom"] )){
                 objectList["ship"].move( sf::Vector2f( 0.0, -stats.shipSpeed )); 
+            }
+        }),
+        action( sf::Keyboard::Space,  [&](){ 
+            std::string bullet = "bullet"+std::to_string(stats.bulletCount);
+            picture tmp = picture(objectList["ship"].getPosition(), "images/lazer.png", sf::Vector2f( 30.0, 30.0 ) );
+            objectList.insert({bullet,tmp});
+            objectList[bullet].move(sf::Vector2f{26.0, -5.0});
+            stats.bulletCount +=1;
+            sf::Event event;
+            for(;;){
+                window.pollEvent(event);
+                if (event.type == sf::Event::KeyReleased) {
+                    if (event.key.code == sf::Keyboard::Space){
+                        break;
+                    }
+                }
             }
         })
     };
