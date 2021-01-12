@@ -6,6 +6,13 @@
 #include <functional>
 #include "Objects.hpp"
 
+//Class where the player's information is stored
+class playerStats{
+public:
+    int shipSpeed = 5;
+};
+
+//Action class which provides usefull functions
 class action {
 private:
 	std::function< bool() > condition;
@@ -44,34 +51,55 @@ public:
 	}
 };
 
+//Class which provides the central game loop
 class gameLoop{
 private:
-
+    playerStats stats;
     sf::Time updateTime = sf::milliseconds(20);
-    std::map<std::string, picture> objectList = {
-        {"ship",picture(sf::Vector2f{ 500.0, 500.0 }, "images/ship1.png", sf::Vector2f( 80.0f, 80.0f ))}
-    };
+    sf::RenderWindow window{ sf::VideoMode{ 1920, 875 },"SFML window" };
+
     std::map<std::string, rectangle> borderList = {
-        {"wall_right",  rectangle{ sf::Vector2f{ 1536.0, 0.0 }, sf::Color(255,255,255), sf::Vector2f{ 10.0, 1080.0  } }},
-        {"wall_left",   rectangle{ sf::Vector2f{ 384.0, 0.0 }, sf::Color(255,255,255), sf::Vector2f{ 10.0, 1080.0 } }},
-        {"wall_top",    rectangle{ sf::Vector2f{ 384.0, 0.0 }, sf::Color(255,255,255), sf::Vector2f{ 1152.0, 10.0 } }},
-        {"wall_bottom", rectangle{ sf::Vector2f{ 384.0, 865.0 }, sf::Color(255,255,255), sf::Vector2f{ 1152.0, 10.0 } }}
+        {"wall_top",    rectangle( sf::Vector2f( 394.0, 0.0 ),   sf::Color(0,0,0), sf::Vector2f( 1142.0, 10.0 ) )},
+        {"wall_bottom", rectangle( sf::Vector2f( 384.0, 865.0 ), sf::Color(0,0,0), sf::Vector2f( 1152.0, 10.0 ) )},
+        {"wall_right",  rectangle( sf::Vector2f( 1536.0, 0.0 ),  sf::Color(255,255,255), sf::Vector2f( 10.0, 1080.0 ) )},
+        {"wall_left",   rectangle( sf::Vector2f( 384.0, 0.0 ),   sf::Color(255,255,255), sf::Vector2f( 10.0, 1080.0 ) )}
     };
-    
-    sf::RenderWindow window{ sf::VideoMode{ 1920, 900 },"SFML window" };
+    std::map<std::string, picture> objectList = {
+        {"ship", picture(sf::Vector2f( 500.0, 500.0 ), "images/ship1.png", sf::Vector2f( 80.0f, 80.0f ))}
+    };
 
     action actions[4] = {
-        action( sf::Keyboard::Left,  [&](){ objectList["ship"].move( sf::Vector2f( -10.0,  0.0 )); }),
-        action( sf::Keyboard::Right, [&](){ objectList["ship"].move( sf::Vector2f( +10.0,  0.0 )); }),
-        action( sf::Keyboard::Up,    [&](){ objectList["ship"].move( sf::Vector2f(  0.0, -10.0 )); }),
-        action( sf::Keyboard::Down,  [&](){ objectList["ship"].move( sf::Vector2f(  0.0, +10.0 )); })
+        action( sf::Keyboard::Left,  [&](){ 
+            objectList["ship"].move( sf::Vector2f( -stats.shipSpeed, 0.0 )); 
+            if(objectList["ship"].collision( borderList["wall_left"] )){
+                objectList["ship"].move( sf::Vector2f( stats.shipSpeed, 0.0 )); 
+            }
+        }),
+        action( sf::Keyboard::Right, [&](){ 
+            objectList["ship"].move( sf::Vector2f( stats.shipSpeed, 0.0 ));
+            if(objectList["ship"].collision( borderList["wall_right"] )){
+                objectList["ship"].move( sf::Vector2f( -stats.shipSpeed,  0.0 )); 
+            } 
+        }),
+        action( sf::Keyboard::Up,    [&](){ 
+            objectList["ship"].move( sf::Vector2f( 0.0, -stats.shipSpeed )); 
+            if(objectList["ship"].collision( borderList["wall_top"] )){
+                objectList["ship"].move( sf::Vector2f( 0.0, stats.shipSpeed )); 
+            }
+        }),
+        action( sf::Keyboard::Down,  [&](){ 
+            objectList["ship"].move( sf::Vector2f( 0.0, stats.shipSpeed )); 
+            if(objectList["ship"].collision( borderList["wall_bottom"] )){
+                objectList["ship"].move( sf::Vector2f( 0.0, -stats.shipSpeed )); 
+            }
+        })
     };
 
 public:
-    sf::Time lag = sf::milliseconds(0);
-    sf::Clock clock;
-
     void loop(){
+        sf::Time lag = sf::milliseconds(0);
+        sf::Clock clock;
+
         while (true){
             sf::sleep( sf::milliseconds(20));
 
