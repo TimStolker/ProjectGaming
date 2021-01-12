@@ -2,78 +2,76 @@
 #define _OBJECTS_HPP
 
 #include <SFML/Graphics.hpp>
-#include <iostream>
-#include <functional>
 
-//Class for a sfml rectangle object
-class rectangle{
-private:
-    sf::Vector2f position;
-    sf::Color color;
-	sf::Vector2f size;
-	sf::RectangleShape shape;
-    
+//================================================================
+
+class objects {
+protected:
+	sf::Vector2f position;
+	sf::Color color;
 public:
-	rectangle( sf::Vector2f position, sf::Color color, sf::Vector2f size):
-    	position( position ),
-        color( color ),
-		size( size )
-   	{}
+	objects(sf::Vector2f position,sf::Color color):
+		position(position), color(color)
+	{}
 
-	rectangle(){}
+	virtual void draw(sf::RenderWindow & window) = 0;
 
-	void draw( sf::RenderWindow & window ) {
-		shape.setFillColor( color );
-		shape.setSize( size );
-		shape.setPosition( position );
-		window.draw(shape);
+	virtual void move( sf::Vector2f delta ) = 0;
+};
+
+//================================================================
+
+class ball : public objects {
+protected:
+	float size;
+	sf::CircleShape circle;
+public:
+	ball( sf::Vector2f position, sf::Color color, float size = 30.0):
+    	objects(position,color),size(size)
+	{}
+
+	void draw( sf::RenderWindow & window ){
+		
+		circle.setRadius(size);
+		circle.setPosition(position);
+		circle.setFillColor(color);
+		window.draw(circle);
 	}
-
-	sf::RectangleShape getShape(){
-		return shape;
+	void move( sf::Vector2f delta ){
+    	position += delta;
+	}
+	auto getCircle(){
+		return circle;
 	}
 };
 
-//Class for a sfml picture object
-class picture {
-private:
-	sf::Vector2f position;
-    sf::Vector2f size;
-    std::string image;
-    sf::Texture pic;
-    sf::RectangleShape shape;
-	
+//================================================================
+
+class wall : public objects {
+protected:
+	sf::Vector2f size;
+	sf::RectangleShape rectangle;
 public:
-    picture( sf::Vector2f position, std::string image, sf::Vector2f shape):
-        position( position ),
-		image( image ),
-		shape( shape )
-    {}
+    wall( sf::Vector2f position, sf::Color color, sf::Vector2f size):
+		objects(position,color),size(size)
+	{}
 
-	picture(){}
-
-    void draw( sf::RenderWindow & window ){   
-        shape.setPosition(position);
-        pic.loadFromFile(image);
-        shape.setTexture(&pic);
-        window.draw(shape);
-    }
-
-	bool collision( auto & object ){
-		return getShape().getGlobalBounds().intersects( object.getShape().getGlobalBounds());
-	}
-
-    void jump( sf::Vector2f delta ){
-		position = delta;
+	void draw( sf::RenderWindow & window ){
+		rectangle.setSize(size);
+		rectangle.setPosition(position);
+		rectangle.setFillColor(color);
+		window.draw(rectangle);
 	}
 
     void move( sf::Vector2f delta ){
-		position += delta;
+    	position += delta;
 	}
 
-	sf::RectangleShape getShape(){
-		return shape;
+	auto getRectangle(){
+		return rectangle;
 	}
 };
 
+//================================================================
 #endif
+
