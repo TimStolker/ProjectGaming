@@ -5,14 +5,14 @@
 #include <iostream>
 #include <functional>
 
+//Class for a sfml rectangle object
 class rectangle{
 private:
     sf::Vector2f position;
     sf::Color color;
 	sf::Vector2f size;
-	sf::RectangleShape rec;
+	sf::RectangleShape shape;
     
-
 public:
 	rectangle( sf::Vector2f position, sf::Color color, sf::Vector2f size):
     	position( position ),
@@ -20,17 +20,23 @@ public:
 		size( size )
    	{}
 
+	rectangle(){}
+
 	void draw( sf::RenderWindow & window ) {
-		rec.setFillColor( color );
-		rec.setSize( size );
-		rec.setPosition( position );
-		window.draw(rec);
+		shape.setFillColor( color );
+		shape.setSize( size );
+		shape.setPosition( position );
+		window.draw(shape);
+	}
+
+	sf::RectangleShape getShape(){
+		return shape;
 	}
 };
 
+//Class for a sfml picture object
 class picture {
-protected:
-
+private:
 	sf::Vector2f position;
     sf::Vector2f size;
     std::string image;
@@ -39,9 +45,9 @@ protected:
 	
 public:
     picture( sf::Vector2f position, std::string image, sf::Vector2f shape):
-        position(position),
-		image(image),
-		shape(shape)
+        position( position ),
+		image( image ),
+		shape( shape )
     {}
 
 	picture(){}
@@ -53,8 +59,8 @@ public:
         window.draw(shape);
     }
 
-	bool collision( sf::Vector2f MousePosition ){
-		return shape.getGlobalBounds().contains(MousePosition);
+	bool collision( auto & object ){
+		return getShape().getGlobalBounds().intersects( object.getShape().getGlobalBounds());
 	}
 
     void jump( sf::Vector2f delta ){
@@ -63,6 +69,10 @@ public:
 
     void move( sf::Vector2f delta ){
 		position += delta;
+	}
+
+	sf::RectangleShape getShape(){
+		return shape;
 	}
 };
 
