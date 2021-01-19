@@ -95,7 +95,7 @@ public:
 		scorestring="";
 		scorebool = false;
 		for(auto&& tmpscorestring : readlist){
-			for(unsigned int i=0; i<=tmpscorestring.size()-2;i++){
+			for(unsigned int i=0; i<=tmpscorestring.size()-1;i++){
 				if (tmpscorestring[i]=='|'){
 					scorebool = true;
 				}
