@@ -83,7 +83,8 @@ private:
     };
     std::map<std::string, picture> objectList = {
         {"Ship", picture(sf::Vector2f( 945.0, 750.0 ), stats.ship, stats.size)},
-        {"Background", picture(sf::Vector2f( 394.0, 0.0 ), "images/space.jpg", sf::Vector2f( 1142.0, 865.0 ))},
+        {"Background1", picture(sf::Vector2f( 394.0, 0.0 ), "images/space.jpg", sf::Vector2f( 1142.0, 866.0 ))},
+		{"Background2", picture(sf::Vector2f( 394.0, -865.0 ), "images/space.jpg", sf::Vector2f( 1142.0, 866.0 ))},
         {"Crate", picture(sf::Vector2f( 3000.0, 300.0 ), "images/Crate.jpg", sf::Vector2f( 40.0, 40.0 ))} 
     };
 
@@ -252,7 +253,14 @@ public:
         std::vector<std::string> toDelete = {};
         std::vector<int> bulletDelete = {};
         int bulletIndex = 0;
-		objectList["Background"].move( sf::Vector2f( 0.0, 1.0 ));
+		objectList["Background1"].move( sf::Vector2f( 0.0, 1.0 ));
+		objectList["Background2"].move( sf::Vector2f( 0.0, 1.0 ));
+		if(objectList["Background1"].getYPosition()==368){
+			objectList["Background1"].jump( sf::Vector2f( 0.0, 394.0));
+		}
+		if(objectList["Background2"].getYPosition()==368){
+			objectList["Background2"].jump( sf::Vector2f(  0.0, 394.0));
+		}
 		if(stats.getPlayerHealth()<=0){
 			playerdead = true;
 			return;
