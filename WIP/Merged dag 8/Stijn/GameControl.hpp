@@ -66,7 +66,7 @@ private:
     sf::Time updateTime = sf::milliseconds(20);
     sf::Clock clock;
     sf::Time elapsedTime;
-	bool playerdead;
+	bool playerdead = false;
     int elapsed =0;
     displayText boardText = displayText(stats);
     int waveStrength = 10;
@@ -84,7 +84,7 @@ private:
     std::map<std::string, picture> objectList = {
         {"Ship", picture(sf::Vector2f( 945.0, 750.0 ), stats.ship, stats.size)},
         {"Background1", picture(sf::Vector2f( 394.0, 0.0 ), "images/space.jpg", sf::Vector2f( 1142.0, 866.0 ))},
-		{"Background2", picture(sf::Vector2f( 394.0, -865.0 ), "images/space.jpg", sf::Vector2f( 1142.0, 866.0 ))},
+		{"Background2", picture(sf::Vector2f( 394.0, -875.0 ), "images/space.jpg", sf::Vector2f( 1142.0, 866.0 ))},
         {"Crate", picture(sf::Vector2f( 3000.0, 300.0 ), "images/Crate.jpg", sf::Vector2f( 40.0, 40.0 ))} 
     };
 
@@ -255,11 +255,11 @@ public:
         int bulletIndex = 0;
 		objectList["Background1"].move( sf::Vector2f( 0.0, 1.0 ));
 		objectList["Background2"].move( sf::Vector2f( 0.0, 1.0 ));
-		if(objectList["Background1"].getYPosition()==368){
-			objectList["Background1"].jump( sf::Vector2f( 0.0, 394.0));
+		if(objectList["Background1"].getYPosition()>=875){
+			objectList["Background1"].jump( sf::Vector2f( 394, -875.0));
 		}
-		if(objectList["Background2"].getYPosition()==368){
-			objectList["Background2"].jump( sf::Vector2f(  0.0, 394.0));
+		if(objectList["Background2"].getYPosition()>=875){
+			objectList["Background2"].jump( sf::Vector2f(  394, -875.0));
 		}
 		if(stats.getPlayerHealth()<=0){
 			playerdead = true;
