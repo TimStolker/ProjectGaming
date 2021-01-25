@@ -91,6 +91,13 @@ private:
 	sf::Sound AlienShootSound;
 	sf::Sound AlienHitSound;
 	sf::Sound PlayerHitSound;
+	sf::SoundBuffer BossScytheBuffer;
+	sf::SoundBuffer BossScytheBigBuffer;
+	sf::Sound BossScytheBigSound;
+	sf::Sound BossScytheSound;
+
+		
+		
 
     std::map<std::string, rectangle> borderList = {
         {"wall_top",    rectangle( sf::Vector2f( 394.0, 0.0 ),   sf::Color(0,0,0), sf::Vector2f( 1142.0, 1.0 ) )},
@@ -253,6 +260,11 @@ public:
 		PlayerHitSound.setBuffer(PlayerHitBuffer);
 		AlienHitBuffer.loadFromFile("sounds/enemy_hit.wav");
 		AlienHitSound.setBuffer(AlienHitBuffer);
+		BossScytheBuffer.loadFromFile("sounds/scythe.wav");
+		BossScytheSound.setBuffer(BossScytheBuffer);
+		BossScytheBigBuffer.loadFromFile("sounds/big_scythe.wav");
+		BossScytheBigSound.setBuffer(BossScytheBigBuffer);
+
 	}
     void resetall(){
         std::vector<std::string> toDelete = {};
@@ -264,7 +276,7 @@ public:
         spawnWave = true;
         crateSpawned = false;
 		waveCount=1;
-		waveStrength=5;
+		waveStrength=45;
 		enemyList.clear();
 		enemyList.push_back(new enemy0());
 		enemyBulletList.clear();
@@ -351,20 +363,27 @@ public:
                 position.x += 25;
                 position.y += 37;
                 picture tmp = picture(position, "images/lazer_green.png", sf::Vector2f(10.0, 25.0), "enemyBullet1" );
-                AlienShootSound.play();
-                if(enemy->getStrength() == 2){
+				if(enemy->getStrength() == 1){
+					AlienShootSound.play();
+				}
+                else if(enemy->getStrength() == 2){
+					AlienShootSound.play();
                     tmp = picture(position, "images/Lazer_red.png", sf::Vector2f(5.0, 15.0), "enemyBullet1" );
                 }
                 else if(enemy->getStrength() == 3){
+					AlienShootSound.play();
                     tmp = picture(position, "images/Lazer_orange.png", sf::Vector2f(25.0, 10.0), "enemyBullet1" );
                 }
                 else if(enemy->getStrength() == 5 || enemy->getStrength() == 15){
+					AlienShootSound.play();
                     tmp = picture(position, "images/Bullet_blue.png", sf::Vector2f(15.0, 15.0), "enemyBullet1" );
                 }
                 else if(enemy->getStrength() == 20){
+					AlienShootSound.play();
                     tmp = picture(position, "images/Lazer_purple.png", sf::Vector2f(5.0, 15.0), "enemyBullet1" );
                 }
                 else if(enemy->getStrength() == 10){
+					AlienShootSound.play();
                     tmp = picture(position, "images/Lazer_orange.png", sf::Vector2f(25.0, 10.0), "diagonalOrange" );
                     if(enemy->getTrajectory().x > 0){
                         tmp.rotate(45.0);
@@ -374,6 +393,7 @@ public:
                     }
                 }
                 else if(enemy->getStrength() == 30){
+					AlienShootSound.play();
                     tmp = picture(position, "images/Lazer_purple.png", sf::Vector2f(5.0, 15.0), "enemyBullet1" );
                     if(enemy->getTrajectory().x < 0){
                         tmp.rotate(45.0);
@@ -388,9 +408,11 @@ public:
                     position.y += 30;
                     position.x += 60;
                     if(attack == 1){
+						BossScytheSound.play();
                         tmp = picture(position, "images/Scythe_left.png", sf::Vector2f(80.0, 80.0), "enemyBullet1" );
                     }
                     else if(attack == 2){
+						BossScytheSound.play();
                         position.x += 156;
                         tmp = picture(position, "images/Scythe_right.png", sf::Vector2f(80.0, 80.0), "enemyBullet1" );
                     }
@@ -398,6 +420,7 @@ public:
                         spawnMinions = true;
                     }
                     else if(attack == 4){
+						BossScytheBigSound.play();
                         position.x += 100;
                         tmp = picture(position, "images/Scythe_right.png", sf::Vector2f(120.0, 120.0), "BossScythe" );
                     }
