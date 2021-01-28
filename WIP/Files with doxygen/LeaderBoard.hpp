@@ -1,3 +1,7 @@
+//this file contains Doxygen lines
+///file LeaderBoard.hpp
+/// \brief LeaderBoardClass
+/// \details Contains all the necessary information about the LeaderBoardClass class
 #ifndef _LEADERBOARD_HPP
 #define _LEADERBOARD_HPP
 
@@ -51,7 +55,8 @@ public:
 	LeaderBoardClass(auto& window):
         window( window )
     {}
-
+	/// \brief Reads the leaderboard.txt file.
+	/// \details Puts every line in readList and is used by leaderboardcalc() and CheckInTop().
 	void readFile(){
 		std::ifstream myfile;
 		read_string = "";
@@ -66,6 +71,8 @@ public:
 		}
 		myfile.close();
 	}
+	/// \brief The main loop for the leaderboard.
+	/// \details This shows the leaderboard on the screen with everything updated.
 
 	bool LeaderBoardLoop(){
 		nameList.clear();
@@ -82,7 +89,8 @@ public:
 			}
 		}
 	}
-
+	/// \brief updates nameList and scoreList.
+	/// \details Used by leaderboardcalc() and CheckInTop().
 	void makeListScoreName(){
 		readFile();
 		nameList.clear();
@@ -114,16 +122,18 @@ public:
 			name_string="";
 		}
 	}
-	
+	/// \brief Writes score_name and score to the leaderboard file.
+    /// \details Used by GameOver.hpp.
+//===========================================================================================
 	void leaderboardcalc(std::string score_name,int score){
 		nameList.clear();
 		scoreList.clear();
 		makeListScoreName();
 		int index = getIndexWithScore(score);
-		writefile(score_name,score,index);
+		writeFile(score_name,score,index);
 	}
-	/// \brief Returns an index with the score 
-	/// \details Used by leaderboardcalc() and CheckInTop()
+	/// \brief Returns an index with the score.
+	/// \details Used by leaderboardcalc() and CheckInTop().
 //===========================================================================================
 	int getIndexWithScore(int score){
 		int index=0;
@@ -143,10 +153,10 @@ public:
 			return index;
 		}
 	}
-	/// \brief Processes all input from user
-	/// \details Makes you go back to the menu
+	/// \brief Processes all input from user.
+	/// \details Makes you go back to the menu.
 //===========================================================================================
-	void writefile(std::string score_name,int score,int index){
+	void writeFile(std::string score_name,int score,int index){
 		std::ofstream myfile;
 		std::string stringToFile = score_name+" | "+std::to_string(score);
 		std::vector<std::string>::iterator iter = readList.begin() + index;
@@ -155,8 +165,8 @@ public:
 		for(const auto &e : readList) myfile << e << "\n";
 		myfile.close();
 	}
-/// \brief Draws all stats to the screen
-/// \details Makes use of namelist for the names and scorelist for the scores
+/// \brief Draws all stats to the screen.
+/// \details Makes use of namelist for the names and scorelist for the scores.
 //===========================================================================================
 	void drawLeaderBoard(){
 		y_value=50;
@@ -188,8 +198,8 @@ public:
 			leaderboard.move(-x2_value,0);
 		}
 	}
-	/// \brief Processes all input from user
-	/// \details Makes you go back to the menu
+	/// \brief Processes all input from user.
+	/// \details Makes you go back to the menu.
 //===========================================================================================	
 	void processInput(){
 		sf::Event event;
@@ -216,7 +226,7 @@ public:
 			action();
 		}
 	}
-/// \brief Renders everything to the screen
+/// \brief Renders everything to the screen.
 /// \details Renders all thats in BoardList and BackList to display and uses drawleaderboard for the score data.
 	
 //===========================================================================================
@@ -234,8 +244,8 @@ public:
         window.display();
     }
 //===========================================================================================
-	/// \brief Gets playerNmr and power and write them in a pool
-	/// \details Requires an int playerNmr and int power
+	/// \brief Gets playerNmr and power and write them in a pool.
+	/// \details Requires an int playerNmr and int power.
 int checkInTop(int score){
         makeListScoreName();
         return getIndexWithScore(score);
