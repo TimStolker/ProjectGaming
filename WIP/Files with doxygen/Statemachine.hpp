@@ -14,7 +14,7 @@
 #include "GameOver.hpp"
 
 /// \brief Statemachine Class
-/// \details This is class handels all the states from the game
+/// \details This class handels all the states from the game
 //===========================================================================================
 class Statemachine{
 private:
