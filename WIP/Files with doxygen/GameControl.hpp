@@ -290,7 +290,7 @@ public:
 		else{
 			BackGroundPicker(1);
 		}
-		if(stats.health()<=0){
+		if(stats.health<=0){
 			playerdead = true;
 			return;
 		}
