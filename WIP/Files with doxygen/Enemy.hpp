@@ -584,10 +584,10 @@ public:
         return false;
     }
 
-    /// \brief Allows the boss to summon portals
-    /// \details This function returns the summonPortal bool
+    /// \brief Allows enemy to summon portals
+    /// \details This function does nothing for enemy1 because it can't summon portals 
     bool summon_Portal(){
-        return summonPortal;
+        return false;
     }
 
     /// \brief Returns Trajectory
